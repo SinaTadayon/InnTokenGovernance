@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
-import "./IInnGovernor.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
+import "./IGovernorINNToken.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/cryptography/draft-EIP712Upgradeable.sol";
 
 
 
 //https://mirror.xyz/0xf880FCd62e27495aA3c9427c4c70A5De66D8d0d2/MLhpkbLf1gsLJ2ih4h4lq564nr5BswXCP8C5jd99914
 
 
-contract InnGovernor is IInnGovernor, EIP712,Ownable {
+contract InnGovernor is IGovernorINNToken, EIP712Upgradeable,OwnableUpgradeable {
     constructor(
         address _InnTokenAddress,
         address startValidator,
@@ -432,7 +432,7 @@ contract InnGovernor is IInnGovernor, EIP712,Ownable {
                 _proposalDetails[proposalId].proposalType ==
                 ProposalType.NewProposal ||
                 _proposalDetails[proposalId].proposalType ==
-                ProposalType.WithdrawFromInverstment 
+                ProposalType.WithdrawFromInvestment 
             )  && initiated
         ) {
             success = (success &&
