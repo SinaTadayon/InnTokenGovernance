@@ -4,7 +4,7 @@
   "rules": {
     "code-complexity": ["warn", 10],
     "function-max-lines": ["warn", 100],
-    "max-line-length": ["error", 120],
+    "max-line-length": ["warn", 160],
     "max-states-count": ["warn", 15],
     "no-empty-blocks": "warn",
     "no-unused-vars": "warn",
@@ -12,7 +12,7 @@
     "reason-string": ["off", { "maxLength": 32 }],
     "constructor-syntax": "error",
 
-    "comprehensive-interface": "warn",
+    "comprehensive-interface": "off",
 
     "quotes": ["error", "double"],
     "const-name-snakecase": "warn",

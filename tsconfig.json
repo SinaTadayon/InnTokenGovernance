@@ -33,6 +33,11 @@
     /* Completeness */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": ["./src/contracts", "./src/test", "./build/export/types", "./src/scripts"],
+  "include": [
+    "./src/contracts",
+    "./src/test",
+    "./export/types",
+    "./src/scripts"
+  ],
   "files": ["./hardhat.config.ts"]
 }

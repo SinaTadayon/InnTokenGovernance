@@ -37,7 +37,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 // Go to https://hardhat.org/config/ to learn more
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.13",
+  solidity: "0.8.14",
   networks: {
     hardhat: netAccounts ? { accounts: netAccounts } : {},
 
@@ -77,12 +77,12 @@ const config: HardhatUserConfig = {
     alphaSort: true,
     disambiguatePaths: false,
     runOnCompile: true,
-    strict: true,
+    strict: false,
     only: [],
   },
 
   abiExporter: {
-    path: "./build/export/abi",
+    path: "./export/abi",
     runOnCompile: false,
     clear: true,
     flat: true,
@@ -91,7 +91,7 @@ const config: HardhatUserConfig = {
   },
 
   typechain: {
-    outDir: "./build/export/types",
+    outDir: "./export/types",
     target: "ethers-v5",
     alwaysGenerateOverloads: false, // should overloads with full signatures like deposit(uint256) be generated always, even if there are no overloads?
     externalArtifacts: ["externalArtifacts/*.json"], // optional array of glob patterns with external artifacts to process (for example external libs from node_modules)

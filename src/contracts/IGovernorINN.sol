@@ -1,11 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 import "@openzeppelin/contracts-upgradeable/utils/structs/EnumerableMapUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/TimersUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
 
-interface IGovernorINNToken is IERC165Upgradeable {
-    
+interface IGovernorINN {
     /**
      * @dev Enum type of votes
      */
@@ -33,11 +30,10 @@ interface IGovernorINNToken is IERC165Upgradeable {
         NONE,
         NEW,
         EXIT,
-        MODIFY,
-        REMOVE,
-        COMMAND
+        FREEZE,
+        UNFREEZE
     }
-    
+
     /**
      * @dev Enum state of consensus proposal
      */
@@ -48,40 +44,20 @@ interface IGovernorINNToken is IERC165Upgradeable {
         CANCELED,
         DEFEATED, // < 51
         SUCCEEDED, //51 >
-        QUEUED,
         EXPIRED,
         EXECUTED
     }
 
-     /**
+    /**
      * @dev Struct request for proposal creation
      */
     struct ProposalRequest {
         bytes32 offchainID;
-        address proposer;
-        ProposalType propsalType;
+        uint256 startAt;
+        ProposalType proposalType;
         ActionType actionType;
-        uint64 startAt;
         string description;
-        bytes[] data;
-    }
-
-
-    /**
-     * @dev Struct proposal storage
-     */
-    struct ProposalCore {
-        uint256 proposalID;
-        bytes32 offchainID;
-        bytes32 description;
-        address proposer;
-        TimersUpgradeable.Timestamp startAt;
-        TimersUpgradeable.Timestamp endAt;
-        ProposalType propsalType;
-        ActionType actionType;
-        bool isExecuted;
-        bool isCanceled;
-        bytes[] data;
+        bytes data;
     }
 
     /**
@@ -90,7 +66,6 @@ interface IGovernorINNToken is IERC165Upgradeable {
     struct NewValidatorProposal {
         string validatorName;
         address validatorEOA;
-        bytes4 commandSig; 
     }
 
     /**
@@ -101,7 +76,6 @@ interface IGovernorINNToken is IERC165Upgradeable {
         uint256 tokenOffer;
         address startupEOA;
         uint16 sharedStake;
-        bytes4 commandSig;
     }
 
     /**
@@ -110,9 +84,8 @@ interface IGovernorINNToken is IERC165Upgradeable {
     struct ExitInvestmentProposal {
         string startupName;
         uint256 tokenOffer;
-        address validatorEOA;
+        address validatorEOA; // validator same as a proposer ???? if true should remove validatorEOA
         uint16 sharedStake;
-        bytes4 commandSig;
     }
 
     /**
@@ -120,7 +93,6 @@ interface IGovernorINNToken is IERC165Upgradeable {
      */
     struct FreezeInvestmentProposal {
         address account;
-        bytes4 commandSig;
     }
 
     /**
@@ -128,7 +100,6 @@ interface IGovernorINNToken is IERC165Upgradeable {
      */
     struct UnfreezeInvestmentProposal {
         address account;
-        bytes4 commandSig;
     }
 
     /**
@@ -137,11 +108,10 @@ interface IGovernorINNToken is IERC165Upgradeable {
     event NewValidatorProposalCreated(
         uint256 indexed proposalID,
         address indexed proposer,
-        address indexed validatorEOA, 
+        address indexed validatorEOA,
         bytes32 offchainID,
-        string description,
-        string validatorName,
-        bytes4 commandSig
+        bytes32 description,
+        string validatorName
     );
 
     /**
@@ -153,60 +123,51 @@ interface IGovernorINNToken is IERC165Upgradeable {
         address indexed startupEOA,
         uint256 tokenOffer,
         bytes32 offchainID,
-        string description,
+        bytes32 description,
         string startupName,
-        uint16 sharedStake,
-        bytes4 commandSig
+        uint16 sharedStake
     );
 
     /**
      * @dev Emitted when a ExitInvestment proposal is created.
      */
     event ExitInvestmentProposalCreated(
-        uint256 indexed proposalID,
+        uint256 indexed proposalId,
         address indexed proposer,
         address indexed validatorEOA,
         uint256 tokenOffer,
         bytes32 offchainID,
-        string description,
+        bytes32 description,
         string startupName,
-        uint16 sharedStake,
-        bytes4 commandSig
+        uint16 sharedStake
     );
 
     /**
      * @dev Emitted when a FreezeAccount proposal is created.
      */
-    event FreezeAccountProposalCreated(
-        uint256 indexed proposalID,
+    event FreezeInvestmentProposalCreated(
+        uint256 indexed proposalId,
         address indexed proposer,
         address indexed account,
-        string description,
         bytes32 offchainID,
-        bytes4 commandSig
+        bytes32 description
     );
 
     /**
      * @dev Emitted when a UnfreezeAccount proposal is created.
      */
-    event UnfreezeAccountProposalCreated(
+    event UnfreezeInvestmentProposalCreated(
         uint256 indexed proposalID,
         address indexed proposer,
         address indexed account,
-        string description,
         bytes32 offchainID,
-        bytes4 commandSig
+        bytes32 description
     );
 
     /**
      * @dev Emitted when a VoteCast created.
      */
-    event VoteCast(
-        address indexed voter,
-        uint256 proposalId,
-        VoteType vote,
-        string reason
-    );
+    event VoteCast(address indexed voter, uint256 indexed proposalId, VoteType vote, string reason);
 
     /**
      * @dev Emitted when a proposal is executed.
@@ -214,98 +175,54 @@ interface IGovernorINNToken is IERC165Upgradeable {
      */
     event ProposalExecuted(uint256 indexed proposalId);
 
-
     /**
      * @dev Emitted when a proposal is canceled.
      */
     event ProposalCanceled(uint256 indexed proposalId, string reason);
 
-
-   /**
+    /**
      * @dev Execute a successful proposal. This requires the quorum to be reached, the vote to be successful, and the
      * deadline to be reached.
      *
      * Emits a {ProposalExecuted} event.
      *
      */
-    function execute(
-        uint256 proposalId,
-        address[] memory targets,
-        uint256[] memory values,
-        bytes[] memory calldatas
-    ) external payable returns (bool);
-
+    function execute(uint256 proposalId) external payable returns (bool);
 
     /**
      * @dev Cancel a proposal. Cancels a proposal only if sender is the proposer.
      * We need to decide to conditions of consensus cancelation
-     *    
+     *
      * Emits a {ProposalCanceled} event.
      *
      */
     function cancel(uint256 proposalId, string memory reason) external returns (bool);
 
-   
     /**
      * @dev Create a new proposal.
      * Emits a {ProposalCreated} event.
      */
     function propose(ProposalRequest memory proposalRequest) external returns (uint256);
 
-
     /**
      * @dev Cast a vote
      * Emits a {VoteCast} event.
      */
-    function castVote(uint256 proposalId, VoteType vote) external returns (bool);
-
-    /**
-     * @dev Cast a with a reason
-     * Emits a {VoteCast} event.
-     */
-    function castVoteWithReason(
+    function castVote(
         string calldata reason,
         uint256 proposalId,
-        VoteType vote       
+        VoteType vote
     ) external returns (bool);
-
-    /**
-     * @dev Cast a vote using the user cryptographic signature.
-     * Emits a {VoteCast} event.
-     */
-    function castVoteBySig(
-        uint256 proposalId,
-        VoteType vote,
-        bytes memory signature
-    ) external returns (bool);
-
-    /**
-     * @dev Cast a vote using the user cryptographic signature and reason
-     * Emits a {VoteCast} event.
-     */
-    function castVoteWithReasonBySig(
-        string calldata reason,
-        uint256 proposalId,
-        VoteType vote,
-        bytes memory signature
-    ) external returns (bool);
-
 
     /**
      * @dev Returns weither `account` has cast a vote on `proposalId`.
      */
-    function hasVoted(uint256 proposalId, address account)
-        external
-        view
-        returns (VoteType);
+    function hasVoted(uint256 proposalId, address account) external view returns (bool);
 
     /**
      * @dev Current state of a proposal, following Compound's convention
      */
-    function state(uint256 proposalId)
-        external
-        view
-        returns (ProposalState);
+    function state(uint256 proposalId) external view returns (ProposalState);
 
     /**
      * @dev Name of the governor instance (used in building the ERC712 domain separator).
@@ -315,20 +232,18 @@ interface IGovernorINNToken is IERC165Upgradeable {
     /**
      * @dev Version of the governor instance (used in building the ERC712 domain separator). Default: "1"
      */
-    function version() external view  returns (string memory);
-
+    function version() external view returns (string memory);
 
     /**
-     * @dev Hashing function used to (re)build the proposal id from the proposal details..
+     * @dev Hashing function used to (re)build the proposal id from the proposal ...
      */
     function hashProposal(
         bytes32 offchainID,
+        bytes32 descriptionHash,
+        uint256 startedAt,
         address proposer,
-        uint64 startAt,
         ProposalType propsalType,
         ActionType actionType,
-        string calldata description,
-        bytes[] calldata data
+        bytes calldata data
     ) external pure returns (uint256);
-  
 }

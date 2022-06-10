@@ -6,7 +6,7 @@
   "scripts": {
     "accounts": "yarn run hardhat accounts",
     "compile": "yarn run hardhat compile && tsc",
-    "clean": "rimraf build coverage",
+    "clean": "rimraf build coverage export",
     "console": "yarn run hardhat console",
     "node": "yarn run hardhat node",
     "hhelp": "yarn run hardhat help",
@@ -22,7 +22,7 @@
     "prettier:fix": "yarn run prettier '**/*.{json,sol,md}' --write",
     "solhint:check": "yarn run solhint 'contracts/**/*.sol'",
     "solhint:fix": "yarn run solhint 'contracts/**/*.sol' --fix",
-    "export": "yarn run hardhat export-artifacts ./build/export/artifacts",
+    "export": "yarn run hardhat export-artifacts ./export/artifacts",
     "export-abi": "yarn run hardhat export-abi",
     "build": "run-s clean eslint:fix prettier:fix solhint:fix compile export export-abi",
     "remixd": "remixd -s $INIT_CWD --remix-ide https://remix.ethereum.org"
