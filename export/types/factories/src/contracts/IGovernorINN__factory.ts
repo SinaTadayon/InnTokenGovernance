@@ -15,9 +15,9 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "proposalId",
-        type: "uint256",
+        type: "bytes32",
       },
       {
         indexed: true,
@@ -70,9 +70,9 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "proposalId",
-        type: "uint256",
+        type: "bytes32",
       },
       {
         indexed: true,
@@ -107,9 +107,9 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "proposalID",
-        type: "uint256",
+        type: "bytes32",
       },
       {
         indexed: true,
@@ -162,9 +162,9 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "proposalID",
-        type: "uint256",
+        type: "bytes32",
       },
       {
         indexed: true,
@@ -205,9 +205,9 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "proposalId",
-        type: "uint256",
+        type: "bytes32",
       },
       {
         indexed: false,
@@ -224,9 +224,9 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "proposalId",
-        type: "uint256",
+        type: "bytes32",
       },
     ],
     name: "ProposalExecuted",
@@ -237,9 +237,9 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "proposalID",
-        type: "uint256",
+        type: "bytes32",
       },
       {
         indexed: true,
@@ -280,9 +280,9 @@ const _abi = [
       },
       {
         indexed: true,
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "proposalId",
-        type: "uint256",
+        type: "bytes32",
       },
       {
         indexed: false,
@@ -303,9 +303,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "proposalId",
-        type: "uint256",
+        type: "bytes32",
       },
       {
         internalType: "string",
@@ -332,9 +332,9 @@ const _abi = [
         type: "string",
       },
       {
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "proposalId",
-        type: "uint256",
+        type: "bytes32",
       },
       {
         internalType: "enum IGovernorINN.VoteType",
@@ -356,9 +356,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "proposalId",
-        type: "uint256",
+        type: "bytes32",
       },
     ],
     name: "execute",
@@ -375,9 +375,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "proposalId",
-        type: "uint256",
+        type: "bytes32",
       },
       {
         internalType: "address",
@@ -409,18 +409,13 @@ const _abi = [
         type: "bytes32",
       },
       {
-        internalType: "uint256",
-        name: "startedAt",
-        type: "uint256",
-      },
-      {
         internalType: "address",
         name: "proposer",
         type: "address",
       },
       {
         internalType: "enum IGovernorINN.ProposalType",
-        name: "propsalType",
+        name: "proposalType",
         type: "uint8",
       },
       {
@@ -437,9 +432,9 @@ const _abi = [
     name: "hashProposal",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "",
-        type: "uint256",
+        type: "bytes32",
       },
     ],
     stateMutability: "pure",
@@ -468,11 +463,6 @@ const _abi = [
             type: "bytes32",
           },
           {
-            internalType: "uint256",
-            name: "startAt",
-            type: "uint256",
-          },
-          {
             internalType: "enum IGovernorINN.ProposalType",
             name: "proposalType",
             type: "uint8",
@@ -497,13 +487,18 @@ const _abi = [
         name: "proposalRequest",
         type: "tuple",
       },
+      {
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes",
+      },
     ],
     name: "propose",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "",
-        type: "uint256",
+        type: "bytes32",
       },
     ],
     stateMutability: "nonpayable",
@@ -512,9 +507,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "proposalId",
-        type: "uint256",
+        type: "bytes32",
       },
     ],
     name: "state",

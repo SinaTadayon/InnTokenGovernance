@@ -30,7 +30,6 @@ import type {
 export declare namespace IGovernorINN {
   export type ProposalRequestStruct = {
     offchainID: BytesLike;
-    startAt: BigNumberish;
     proposalType: BigNumberish;
     actionType: BigNumberish;
     description: string;
@@ -39,14 +38,12 @@ export declare namespace IGovernorINN {
 
   export type ProposalRequestStructOutput = [
     string,
-    BigNumber,
     number,
     number,
     string,
     string
   ] & {
     offchainID: string;
-    startAt: BigNumber;
     proposalType: number;
     actionType: number;
     description: string;
@@ -56,14 +53,14 @@ export declare namespace IGovernorINN {
 
 export interface IGovernorINNInterface extends utils.Interface {
   functions: {
-    "cancel(uint256,string)": FunctionFragment;
-    "castVote(string,uint256,uint8)": FunctionFragment;
-    "execute(uint256)": FunctionFragment;
-    "hasVoted(uint256,address)": FunctionFragment;
-    "hashProposal(bytes32,bytes32,uint256,address,uint8,uint8,bytes)": FunctionFragment;
+    "cancel(bytes32,string)": FunctionFragment;
+    "castVote(string,bytes32,uint8)": FunctionFragment;
+    "execute(bytes32)": FunctionFragment;
+    "hasVoted(bytes32,address)": FunctionFragment;
+    "hashProposal(bytes32,bytes32,address,uint8,uint8,bytes)": FunctionFragment;
     "name()": FunctionFragment;
-    "propose((bytes32,uint256,uint8,uint8,string,bytes))": FunctionFragment;
-    "state(uint256)": FunctionFragment;
+    "propose((bytes32,uint8,uint8,string,bytes),bytes)": FunctionFragment;
+    "state(bytes32)": FunctionFragment;
     "version()": FunctionFragment;
   };
 
@@ -82,26 +79,22 @@ export interface IGovernorINNInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "cancel",
-    values: [BigNumberish, string]
+    values: [BytesLike, string]
   ): string;
   encodeFunctionData(
     functionFragment: "castVote",
-    values: [string, BigNumberish, BigNumberish]
+    values: [string, BytesLike, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "execute",
-    values: [BigNumberish]
-  ): string;
+  encodeFunctionData(functionFragment: "execute", values: [BytesLike]): string;
   encodeFunctionData(
     functionFragment: "hasVoted",
-    values: [BigNumberish, string]
+    values: [BytesLike, string]
   ): string;
   encodeFunctionData(
     functionFragment: "hashProposal",
     values: [
       BytesLike,
       BytesLike,
-      BigNumberish,
       string,
       BigNumberish,
       BigNumberish,
@@ -111,9 +104,9 @@ export interface IGovernorINNInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "propose",
-    values: [IGovernorINN.ProposalRequestStruct]
+    values: [IGovernorINN.ProposalRequestStruct, BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: "state", values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: "state", values: [BytesLike]): string;
   encodeFunctionData(functionFragment: "version", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "cancel", data: BytesLike): Result;
@@ -130,14 +123,14 @@ export interface IGovernorINNInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "version", data: BytesLike): Result;
 
   events: {
-    "ExitInvestmentProposalCreated(uint256,address,address,uint256,bytes32,bytes32,string,uint16)": EventFragment;
-    "FreezeInvestmentProposalCreated(uint256,address,address,bytes32,bytes32)": EventFragment;
-    "NewInvestmentProposalCreated(uint256,address,address,uint256,bytes32,bytes32,string,uint16)": EventFragment;
-    "NewValidatorProposalCreated(uint256,address,address,bytes32,bytes32,string)": EventFragment;
-    "ProposalCanceled(uint256,string)": EventFragment;
-    "ProposalExecuted(uint256)": EventFragment;
-    "UnfreezeInvestmentProposalCreated(uint256,address,address,bytes32,bytes32)": EventFragment;
-    "VoteCast(address,uint256,uint8,string)": EventFragment;
+    "ExitInvestmentProposalCreated(bytes32,address,address,uint256,bytes32,bytes32,string,uint16)": EventFragment;
+    "FreezeInvestmentProposalCreated(bytes32,address,address,bytes32,bytes32)": EventFragment;
+    "NewInvestmentProposalCreated(bytes32,address,address,uint256,bytes32,bytes32,string,uint16)": EventFragment;
+    "NewValidatorProposalCreated(bytes32,address,address,bytes32,bytes32,string)": EventFragment;
+    "ProposalCanceled(bytes32,string)": EventFragment;
+    "ProposalExecuted(bytes32)": EventFragment;
+    "UnfreezeInvestmentProposalCreated(bytes32,address,address,bytes32,bytes32)": EventFragment;
+    "VoteCast(address,bytes32,uint8,string)": EventFragment;
   };
 
   getEvent(
@@ -161,7 +154,7 @@ export interface IGovernorINNInterface extends utils.Interface {
 }
 
 export interface ExitInvestmentProposalCreatedEventObject {
-  proposalId: BigNumber;
+  proposalId: string;
   proposer: string;
   validatorEOA: string;
   tokenOffer: BigNumber;
@@ -171,7 +164,7 @@ export interface ExitInvestmentProposalCreatedEventObject {
   sharedStake: number;
 }
 export type ExitInvestmentProposalCreatedEvent = TypedEvent<
-  [BigNumber, string, string, BigNumber, string, string, string, number],
+  [string, string, string, BigNumber, string, string, string, number],
   ExitInvestmentProposalCreatedEventObject
 >;
 
@@ -179,14 +172,14 @@ export type ExitInvestmentProposalCreatedEventFilter =
   TypedEventFilter<ExitInvestmentProposalCreatedEvent>;
 
 export interface FreezeInvestmentProposalCreatedEventObject {
-  proposalId: BigNumber;
+  proposalId: string;
   proposer: string;
   account: string;
   offchainID: string;
   description: string;
 }
 export type FreezeInvestmentProposalCreatedEvent = TypedEvent<
-  [BigNumber, string, string, string, string],
+  [string, string, string, string, string],
   FreezeInvestmentProposalCreatedEventObject
 >;
 
@@ -194,7 +187,7 @@ export type FreezeInvestmentProposalCreatedEventFilter =
   TypedEventFilter<FreezeInvestmentProposalCreatedEvent>;
 
 export interface NewInvestmentProposalCreatedEventObject {
-  proposalID: BigNumber;
+  proposalID: string;
   proposer: string;
   startupEOA: string;
   tokenOffer: BigNumber;
@@ -204,7 +197,7 @@ export interface NewInvestmentProposalCreatedEventObject {
   sharedStake: number;
 }
 export type NewInvestmentProposalCreatedEvent = TypedEvent<
-  [BigNumber, string, string, BigNumber, string, string, string, number],
+  [string, string, string, BigNumber, string, string, string, number],
   NewInvestmentProposalCreatedEventObject
 >;
 
@@ -212,7 +205,7 @@ export type NewInvestmentProposalCreatedEventFilter =
   TypedEventFilter<NewInvestmentProposalCreatedEvent>;
 
 export interface NewValidatorProposalCreatedEventObject {
-  proposalID: BigNumber;
+  proposalID: string;
   proposer: string;
   validatorEOA: string;
   offchainID: string;
@@ -220,7 +213,7 @@ export interface NewValidatorProposalCreatedEventObject {
   validatorName: string;
 }
 export type NewValidatorProposalCreatedEvent = TypedEvent<
-  [BigNumber, string, string, string, string, string],
+  [string, string, string, string, string, string],
   NewValidatorProposalCreatedEventObject
 >;
 
@@ -228,11 +221,11 @@ export type NewValidatorProposalCreatedEventFilter =
   TypedEventFilter<NewValidatorProposalCreatedEvent>;
 
 export interface ProposalCanceledEventObject {
-  proposalId: BigNumber;
+  proposalId: string;
   reason: string;
 }
 export type ProposalCanceledEvent = TypedEvent<
-  [BigNumber, string],
+  [string, string],
   ProposalCanceledEventObject
 >;
 
@@ -240,10 +233,10 @@ export type ProposalCanceledEventFilter =
   TypedEventFilter<ProposalCanceledEvent>;
 
 export interface ProposalExecutedEventObject {
-  proposalId: BigNumber;
+  proposalId: string;
 }
 export type ProposalExecutedEvent = TypedEvent<
-  [BigNumber],
+  [string],
   ProposalExecutedEventObject
 >;
 
@@ -251,14 +244,14 @@ export type ProposalExecutedEventFilter =
   TypedEventFilter<ProposalExecutedEvent>;
 
 export interface UnfreezeInvestmentProposalCreatedEventObject {
-  proposalID: BigNumber;
+  proposalID: string;
   proposer: string;
   account: string;
   offchainID: string;
   description: string;
 }
 export type UnfreezeInvestmentProposalCreatedEvent = TypedEvent<
-  [BigNumber, string, string, string, string],
+  [string, string, string, string, string],
   UnfreezeInvestmentProposalCreatedEventObject
 >;
 
@@ -267,12 +260,12 @@ export type UnfreezeInvestmentProposalCreatedEventFilter =
 
 export interface VoteCastEventObject {
   voter: string;
-  proposalId: BigNumber;
+  proposalId: string;
   vote: number;
   reason: string;
 }
 export type VoteCastEvent = TypedEvent<
-  [string, BigNumber, number, string],
+  [string, string, number, string],
   VoteCastEventObject
 >;
 
@@ -306,25 +299,25 @@ export interface IGovernorINN extends BaseContract {
 
   functions: {
     cancel(
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       reason: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     castVote(
       reason: string,
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       vote: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     execute(
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     hasVoted(
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       account: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
@@ -332,49 +325,46 @@ export interface IGovernorINN extends BaseContract {
     hashProposal(
       offchainID: BytesLike,
       descriptionHash: BytesLike,
-      startedAt: BigNumberish,
       proposer: string,
-      propsalType: BigNumberish,
+      proposalType: BigNumberish,
       actionType: BigNumberish,
       data: BytesLike,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<[string]>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
     propose(
       proposalRequest: IGovernorINN.ProposalRequestStruct,
+      signature: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    state(
-      proposalId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[number]>;
+    state(proposalId: BytesLike, overrides?: CallOverrides): Promise<[number]>;
 
     version(overrides?: CallOverrides): Promise<[string]>;
   };
 
   cancel(
-    proposalId: BigNumberish,
+    proposalId: BytesLike,
     reason: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   castVote(
     reason: string,
-    proposalId: BigNumberish,
+    proposalId: BytesLike,
     vote: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   execute(
-    proposalId: BigNumberish,
+    proposalId: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   hasVoted(
-    proposalId: BigNumberish,
+    proposalId: BytesLike,
     account: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
@@ -382,46 +372,43 @@ export interface IGovernorINN extends BaseContract {
   hashProposal(
     offchainID: BytesLike,
     descriptionHash: BytesLike,
-    startedAt: BigNumberish,
     proposer: string,
-    propsalType: BigNumberish,
+    proposalType: BigNumberish,
     actionType: BigNumberish,
     data: BytesLike,
     overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  ): Promise<string>;
 
   name(overrides?: CallOverrides): Promise<string>;
 
   propose(
     proposalRequest: IGovernorINN.ProposalRequestStruct,
+    signature: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  state(proposalId: BigNumberish, overrides?: CallOverrides): Promise<number>;
+  state(proposalId: BytesLike, overrides?: CallOverrides): Promise<number>;
 
   version(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
     cancel(
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       reason: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     castVote(
       reason: string,
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       vote: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    execute(
-      proposalId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    execute(proposalId: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
     hasVoted(
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -429,29 +416,29 @@ export interface IGovernorINN extends BaseContract {
     hashProposal(
       offchainID: BytesLike,
       descriptionHash: BytesLike,
-      startedAt: BigNumberish,
       proposer: string,
-      propsalType: BigNumberish,
+      proposalType: BigNumberish,
       actionType: BigNumberish,
       data: BytesLike,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<string>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
     propose(
       proposalRequest: IGovernorINN.ProposalRequestStruct,
+      signature: BytesLike,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<string>;
 
-    state(proposalId: BigNumberish, overrides?: CallOverrides): Promise<number>;
+    state(proposalId: BytesLike, overrides?: CallOverrides): Promise<number>;
 
     version(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
-    "ExitInvestmentProposalCreated(uint256,address,address,uint256,bytes32,bytes32,string,uint16)"(
-      proposalId?: BigNumberish | null,
+    "ExitInvestmentProposalCreated(bytes32,address,address,uint256,bytes32,bytes32,string,uint16)"(
+      proposalId?: BytesLike | null,
       proposer?: string | null,
       validatorEOA?: string | null,
       tokenOffer?: null,
@@ -461,7 +448,7 @@ export interface IGovernorINN extends BaseContract {
       sharedStake?: null
     ): ExitInvestmentProposalCreatedEventFilter;
     ExitInvestmentProposalCreated(
-      proposalId?: BigNumberish | null,
+      proposalId?: BytesLike | null,
       proposer?: string | null,
       validatorEOA?: string | null,
       tokenOffer?: null,
@@ -471,23 +458,23 @@ export interface IGovernorINN extends BaseContract {
       sharedStake?: null
     ): ExitInvestmentProposalCreatedEventFilter;
 
-    "FreezeInvestmentProposalCreated(uint256,address,address,bytes32,bytes32)"(
-      proposalId?: BigNumberish | null,
+    "FreezeInvestmentProposalCreated(bytes32,address,address,bytes32,bytes32)"(
+      proposalId?: BytesLike | null,
       proposer?: string | null,
       account?: string | null,
       offchainID?: null,
       description?: null
     ): FreezeInvestmentProposalCreatedEventFilter;
     FreezeInvestmentProposalCreated(
-      proposalId?: BigNumberish | null,
+      proposalId?: BytesLike | null,
       proposer?: string | null,
       account?: string | null,
       offchainID?: null,
       description?: null
     ): FreezeInvestmentProposalCreatedEventFilter;
 
-    "NewInvestmentProposalCreated(uint256,address,address,uint256,bytes32,bytes32,string,uint16)"(
-      proposalID?: BigNumberish | null,
+    "NewInvestmentProposalCreated(bytes32,address,address,uint256,bytes32,bytes32,string,uint16)"(
+      proposalID?: BytesLike | null,
       proposer?: string | null,
       startupEOA?: string | null,
       tokenOffer?: null,
@@ -497,7 +484,7 @@ export interface IGovernorINN extends BaseContract {
       sharedStake?: null
     ): NewInvestmentProposalCreatedEventFilter;
     NewInvestmentProposalCreated(
-      proposalID?: BigNumberish | null,
+      proposalID?: BytesLike | null,
       proposer?: string | null,
       startupEOA?: string | null,
       tokenOffer?: null,
@@ -507,8 +494,8 @@ export interface IGovernorINN extends BaseContract {
       sharedStake?: null
     ): NewInvestmentProposalCreatedEventFilter;
 
-    "NewValidatorProposalCreated(uint256,address,address,bytes32,bytes32,string)"(
-      proposalID?: BigNumberish | null,
+    "NewValidatorProposalCreated(bytes32,address,address,bytes32,bytes32,string)"(
+      proposalID?: BytesLike | null,
       proposer?: string | null,
       validatorEOA?: string | null,
       offchainID?: null,
@@ -516,7 +503,7 @@ export interface IGovernorINN extends BaseContract {
       validatorName?: null
     ): NewValidatorProposalCreatedEventFilter;
     NewValidatorProposalCreated(
-      proposalID?: BigNumberish | null,
+      proposalID?: BytesLike | null,
       proposer?: string | null,
       validatorEOA?: string | null,
       offchainID?: null,
@@ -524,46 +511,46 @@ export interface IGovernorINN extends BaseContract {
       validatorName?: null
     ): NewValidatorProposalCreatedEventFilter;
 
-    "ProposalCanceled(uint256,string)"(
-      proposalId?: BigNumberish | null,
+    "ProposalCanceled(bytes32,string)"(
+      proposalId?: BytesLike | null,
       reason?: null
     ): ProposalCanceledEventFilter;
     ProposalCanceled(
-      proposalId?: BigNumberish | null,
+      proposalId?: BytesLike | null,
       reason?: null
     ): ProposalCanceledEventFilter;
 
-    "ProposalExecuted(uint256)"(
-      proposalId?: BigNumberish | null
+    "ProposalExecuted(bytes32)"(
+      proposalId?: BytesLike | null
     ): ProposalExecutedEventFilter;
     ProposalExecuted(
-      proposalId?: BigNumberish | null
+      proposalId?: BytesLike | null
     ): ProposalExecutedEventFilter;
 
-    "UnfreezeInvestmentProposalCreated(uint256,address,address,bytes32,bytes32)"(
-      proposalID?: BigNumberish | null,
+    "UnfreezeInvestmentProposalCreated(bytes32,address,address,bytes32,bytes32)"(
+      proposalID?: BytesLike | null,
       proposer?: string | null,
       account?: string | null,
       offchainID?: null,
       description?: null
     ): UnfreezeInvestmentProposalCreatedEventFilter;
     UnfreezeInvestmentProposalCreated(
-      proposalID?: BigNumberish | null,
+      proposalID?: BytesLike | null,
       proposer?: string | null,
       account?: string | null,
       offchainID?: null,
       description?: null
     ): UnfreezeInvestmentProposalCreatedEventFilter;
 
-    "VoteCast(address,uint256,uint8,string)"(
+    "VoteCast(address,bytes32,uint8,string)"(
       voter?: string | null,
-      proposalId?: BigNumberish | null,
+      proposalId?: BytesLike | null,
       vote?: null,
       reason?: null
     ): VoteCastEventFilter;
     VoteCast(
       voter?: string | null,
-      proposalId?: BigNumberish | null,
+      proposalId?: BytesLike | null,
       vote?: null,
       reason?: null
     ): VoteCastEventFilter;
@@ -571,25 +558,25 @@ export interface IGovernorINN extends BaseContract {
 
   estimateGas: {
     cancel(
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       reason: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     castVote(
       reason: string,
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       vote: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     execute(
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     hasVoted(
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       account: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -597,9 +584,8 @@ export interface IGovernorINN extends BaseContract {
     hashProposal(
       offchainID: BytesLike,
       descriptionHash: BytesLike,
-      startedAt: BigNumberish,
       proposer: string,
-      propsalType: BigNumberish,
+      proposalType: BigNumberish,
       actionType: BigNumberish,
       data: BytesLike,
       overrides?: CallOverrides
@@ -609,38 +595,36 @@ export interface IGovernorINN extends BaseContract {
 
     propose(
       proposalRequest: IGovernorINN.ProposalRequestStruct,
+      signature: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    state(
-      proposalId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    state(proposalId: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     version(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
     cancel(
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       reason: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     castVote(
       reason: string,
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       vote: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     execute(
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     hasVoted(
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       account: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -648,9 +632,8 @@ export interface IGovernorINN extends BaseContract {
     hashProposal(
       offchainID: BytesLike,
       descriptionHash: BytesLike,
-      startedAt: BigNumberish,
       proposer: string,
-      propsalType: BigNumberish,
+      proposalType: BigNumberish,
       actionType: BigNumberish,
       data: BytesLike,
       overrides?: CallOverrides
@@ -660,11 +643,12 @@ export interface IGovernorINN extends BaseContract {
 
     propose(
       proposalRequest: IGovernorINN.ProposalRequestStruct,
+      signature: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     state(
-      proposalId: BigNumberish,
+      proposalId: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

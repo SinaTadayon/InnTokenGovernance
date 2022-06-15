@@ -57,13 +57,29 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165Upgradeable__factory>;
     getContractFactory(
+      name: "ERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20__factory>;
+    getContractFactory(
+      name: "IERC20Metadata",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20Metadata__factory>;
+    getContractFactory(
+      name: "IERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20__factory>;
+    getContractFactory(
       name: "IGovernorINN",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IGovernorINN__factory>;
     getContractFactory(
-      name: "InnGovernor",
+      name: "IGovernorINNImpl",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.InnGovernor__factory>;
+    ): Promise<Contracts.IGovernorINNImpl__factory>;
+    getContractFactory(
+      name: "ERC20Test",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20Test__factory>;
 
     getContractAt(
       name: "AccessControlUpgradeable",
@@ -121,15 +137,35 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165Upgradeable>;
     getContractAt(
+      name: "ERC20",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC20>;
+    getContractAt(
+      name: "IERC20Metadata",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20Metadata>;
+    getContractAt(
+      name: "IERC20",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20>;
+    getContractAt(
       name: "IGovernorINN",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IGovernorINN>;
     getContractAt(
-      name: "InnGovernor",
+      name: "IGovernorINNImpl",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.InnGovernor>;
+    ): Promise<Contracts.IGovernorINNImpl>;
+    getContractAt(
+      name: "ERC20Test",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC20Test>;
 
     // default types
     getContractFactory(

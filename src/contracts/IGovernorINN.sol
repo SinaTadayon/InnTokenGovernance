@@ -53,7 +53,6 @@ interface IGovernorINN {
      */
     struct ProposalRequest {
         bytes32 offchainID;
-        uint256 startAt;
         ProposalType proposalType;
         ActionType actionType;
         string description;
@@ -106,7 +105,7 @@ interface IGovernorINN {
      * @dev Emitted when a NewValidator proposal is created.
      */
     event NewValidatorProposalCreated(
-        uint256 indexed proposalID,
+        bytes32 indexed proposalID,
         address indexed proposer,
         address indexed validatorEOA,
         bytes32 offchainID,
@@ -118,7 +117,7 @@ interface IGovernorINN {
      * @dev Emitted when a NewInvestment proposal is created.
      */
     event NewInvestmentProposalCreated(
-        uint256 indexed proposalID,
+        bytes32 indexed proposalID,
         address indexed proposer,
         address indexed startupEOA,
         uint256 tokenOffer,
@@ -132,7 +131,7 @@ interface IGovernorINN {
      * @dev Emitted when a ExitInvestment proposal is created.
      */
     event ExitInvestmentProposalCreated(
-        uint256 indexed proposalId,
+        bytes32 indexed proposalId,
         address indexed proposer,
         address indexed validatorEOA,
         uint256 tokenOffer,
@@ -146,7 +145,7 @@ interface IGovernorINN {
      * @dev Emitted when a FreezeAccount proposal is created.
      */
     event FreezeInvestmentProposalCreated(
-        uint256 indexed proposalId,
+        bytes32 indexed proposalId,
         address indexed proposer,
         address indexed account,
         bytes32 offchainID,
@@ -157,7 +156,7 @@ interface IGovernorINN {
      * @dev Emitted when a UnfreezeAccount proposal is created.
      */
     event UnfreezeInvestmentProposalCreated(
-        uint256 indexed proposalID,
+        bytes32 indexed proposalID,
         address indexed proposer,
         address indexed account,
         bytes32 offchainID,
@@ -167,18 +166,18 @@ interface IGovernorINN {
     /**
      * @dev Emitted when a VoteCast created.
      */
-    event VoteCast(address indexed voter, uint256 indexed proposalId, VoteType vote, string reason);
+    event VoteCast(address indexed voter, bytes32 indexed proposalId, VoteType vote, string reason);
 
     /**
      * @dev Emitted when a proposal is executed.
      * TODO work on Event
      */
-    event ProposalExecuted(uint256 indexed proposalId);
+    event ProposalExecuted(bytes32 indexed proposalId);
 
     /**
      * @dev Emitted when a proposal is canceled.
      */
-    event ProposalCanceled(uint256 indexed proposalId, string reason);
+    event ProposalCanceled(bytes32 indexed proposalId, string reason);
 
     /**
      * @dev Execute a successful proposal. This requires the quorum to be reached, the vote to be successful, and the
@@ -187,7 +186,7 @@ interface IGovernorINN {
      * Emits a {ProposalExecuted} event.
      *
      */
-    function execute(uint256 proposalId) external payable returns (bool);
+    function execute(bytes32 proposalId) external payable returns (bool);
 
     /**
      * @dev Cancel a proposal. Cancels a proposal only if sender is the proposer.
@@ -196,13 +195,13 @@ interface IGovernorINN {
      * Emits a {ProposalCanceled} event.
      *
      */
-    function cancel(uint256 proposalId, string memory reason) external returns (bool);
+    function cancel(bytes32 proposalId, string memory reason) external returns (bool);
 
     /**
      * @dev Create a new proposal.
      * Emits a {ProposalCreated} event.
      */
-    function propose(ProposalRequest memory proposalRequest) external returns (uint256);
+    function propose(ProposalRequest memory proposalRequest, bytes memory signature) external returns (bytes32);
 
     /**
      * @dev Cast a vote
@@ -210,19 +209,19 @@ interface IGovernorINN {
      */
     function castVote(
         string calldata reason,
-        uint256 proposalId,
+        bytes32 proposalId,
         VoteType vote
     ) external returns (bool);
 
     /**
      * @dev Returns weither `account` has cast a vote on `proposalId`.
      */
-    function hasVoted(uint256 proposalId, address account) external view returns (bool);
+    function hasVoted(bytes32 proposalId, address account) external view returns (bool);
 
     /**
      * @dev Current state of a proposal, following Compound's convention
      */
-    function state(uint256 proposalId) external view returns (ProposalState);
+    function state(bytes32 proposalId) external view returns (ProposalState);
 
     /**
      * @dev Name of the governor instance (used in building the ERC712 domain separator).
@@ -240,10 +239,9 @@ interface IGovernorINN {
     function hashProposal(
         bytes32 offchainID,
         bytes32 descriptionHash,
-        uint256 startedAt,
         address proposer,
-        ProposalType propsalType,
+        ProposalType proposalType,
         ActionType actionType,
-        bytes calldata data
-    ) external pure returns (uint256);
+        bytes memory data
+    ) external pure returns (bytes32);
 }

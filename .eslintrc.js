@@ -20,5 +20,6 @@ module.exports = {
       "error",
       { ignores: ["modules"] },
     ],
+    "no-unused-expressions": ["off", { files: ["*.test.js", "*.spec.js"] }],
   },
 };

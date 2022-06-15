@@ -4,9 +4,9 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "proposalId",
-        "type": "uint256"
+        "type": "bytes32"
       },
       {
         "indexed": true,
@@ -59,9 +59,9 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "proposalId",
-        "type": "uint256"
+        "type": "bytes32"
       },
       {
         "indexed": true,
@@ -96,9 +96,9 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "proposalID",
-        "type": "uint256"
+        "type": "bytes32"
       },
       {
         "indexed": true,
@@ -151,9 +151,9 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "proposalID",
-        "type": "uint256"
+        "type": "bytes32"
       },
       {
         "indexed": true,
@@ -194,9 +194,9 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "proposalId",
-        "type": "uint256"
+        "type": "bytes32"
       },
       {
         "indexed": false,
@@ -213,9 +213,9 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "proposalId",
-        "type": "uint256"
+        "type": "bytes32"
       }
     ],
     "name": "ProposalExecuted",
@@ -226,9 +226,9 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "proposalID",
-        "type": "uint256"
+        "type": "bytes32"
       },
       {
         "indexed": true,
@@ -269,9 +269,9 @@
       },
       {
         "indexed": true,
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "proposalId",
-        "type": "uint256"
+        "type": "bytes32"
       },
       {
         "indexed": false,
@@ -292,9 +292,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "proposalId",
-        "type": "uint256"
+        "type": "bytes32"
       },
       {
         "internalType": "string",
@@ -321,9 +321,9 @@
         "type": "string"
       },
       {
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "proposalId",
-        "type": "uint256"
+        "type": "bytes32"
       },
       {
         "internalType": "enum IGovernorINN.VoteType",
@@ -345,9 +345,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "proposalId",
-        "type": "uint256"
+        "type": "bytes32"
       }
     ],
     "name": "execute",
@@ -364,9 +364,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "proposalId",
-        "type": "uint256"
+        "type": "bytes32"
       },
       {
         "internalType": "address",
@@ -398,18 +398,13 @@
         "type": "bytes32"
       },
       {
-        "internalType": "uint256",
-        "name": "startedAt",
-        "type": "uint256"
-      },
-      {
         "internalType": "address",
         "name": "proposer",
         "type": "address"
       },
       {
         "internalType": "enum IGovernorINN.ProposalType",
-        "name": "propsalType",
+        "name": "proposalType",
         "type": "uint8"
       },
       {
@@ -426,9 +421,9 @@
     "name": "hashProposal",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "",
-        "type": "uint256"
+        "type": "bytes32"
       }
     ],
     "stateMutability": "pure",
@@ -457,11 +452,6 @@
             "type": "bytes32"
           },
           {
-            "internalType": "uint256",
-            "name": "startAt",
-            "type": "uint256"
-          },
-          {
             "internalType": "enum IGovernorINN.ProposalType",
             "name": "proposalType",
             "type": "uint8"
@@ -485,14 +475,19 @@
         "internalType": "struct IGovernorINN.ProposalRequest",
         "name": "proposalRequest",
         "type": "tuple"
+      },
+      {
+        "internalType": "bytes",
+        "name": "signature",
+        "type": "bytes"
       }
     ],
     "name": "propose",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "",
-        "type": "uint256"
+        "type": "bytes32"
       }
     ],
     "stateMutability": "nonpayable",
@@ -501,9 +496,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "proposalId",
-        "type": "uint256"
+        "type": "bytes32"
       }
     ],
     "name": "state",

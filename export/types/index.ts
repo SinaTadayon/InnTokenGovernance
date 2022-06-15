@@ -28,7 +28,15 @@ export type { ERC165Upgradeable } from "./@openzeppelin/contracts-upgradeable/ut
 export { ERC165Upgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable__factory";
 export type { IERC165Upgradeable } from "./@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable";
 export { IERC165Upgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable__factory";
+export type { ERC20 } from "./@openzeppelin/contracts/token/ERC20/ERC20";
+export { ERC20__factory } from "./factories/@openzeppelin/contracts/token/ERC20/ERC20__factory";
+export type { IERC20Metadata } from "./@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata";
+export { IERC20Metadata__factory } from "./factories/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata__factory";
+export type { IERC20 } from "./@openzeppelin/contracts/token/ERC20/IERC20";
+export { IERC20__factory } from "./factories/@openzeppelin/contracts/token/ERC20/IERC20__factory";
 export type { IGovernorINN } from "./src/contracts/IGovernorINN";
 export { IGovernorINN__factory } from "./factories/src/contracts/IGovernorINN__factory";
-export type { InnGovernor } from "./src/contracts/IGovernorINNImpl.sol/InnGovernor";
-export { InnGovernor__factory } from "./factories/src/contracts/IGovernorINNImpl.sol/InnGovernor__factory";
+export type { IGovernorINNImpl } from "./src/contracts/IGovernorINNImpl";
+export { IGovernorINNImpl__factory } from "./factories/src/contracts/IGovernorINNImpl__factory";
+export type { ERC20Test } from "./src/contracts/test/ERC20Test";
+export { ERC20Test__factory } from "./factories/src/contracts/test/ERC20Test__factory";

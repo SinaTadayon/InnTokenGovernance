@@ -4,6 +4,7 @@ import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-ethers";
+import "@openzeppelin/hardhat-upgrades";
 import "@typechain/hardhat";
 import "hardhat-deploy";
 import "hardhat-gas-reporter";
@@ -65,13 +66,13 @@ const config: HardhatUserConfig = {
     currency: "USD",
   },
 
-  etherscan: {
-    apiKey: {
-      // polygon
-      polygon: process.env.ETHERSCAN_KEY_POLYGON_MAIN,
-      polygonMumbai: process.env.ETHERSCAN_KEY_POLYGON_MUMBAI,
-    },
-  },
+  // etherscan: {
+  //   apiKey: {
+  //     // polygon
+  //     polygon: process.env.ETHERSCAN_KEY_POLYGON_MAIN,
+  //     polygonMumbai: process.env.ETHERSCAN_KEY_POLYGON_MUMBAI,
+  //   },
+  // },
 
   contractSizer: {
     alphaSort: true,
