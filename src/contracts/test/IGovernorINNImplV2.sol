@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
-import "./IGovernorINN.sol";
+import "./../IGovernorINN.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/draft-EIP712Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
@@ -8,7 +8,7 @@ import "@openzeppelin/contracts-upgradeable/utils/structs/EnumerableSetUpgradeab
 import "@openzeppelin/contracts-upgradeable/utils/TimersUpgradeable.sol";
 import "hardhat/console.sol";
 
-contract IGovernorINNImpl is IGovernorINN, Initializable, UUPSUpgradeable, AccessControlUpgradeable {
+contract IGovernorINNImplV2 is IGovernorINN, Initializable, UUPSUpgradeable, AccessControlUpgradeable {
     using EnumerableSetUpgradeable for EnumerableSetUpgradeable.AddressSet;
     using TimersUpgradeable for TimersUpgradeable.Timestamp;
 
@@ -75,6 +75,10 @@ contract IGovernorINNImpl is IGovernorINN, Initializable, UUPSUpgradeable, Acces
     bool public isMigrationEnabled;
     bool public isAdminFirstVote;
 
+    // Add variables
+    address public oracle;
+    address public oldVersion;
+
     modifier onlyValidatorsOrAdmin() {
         require(
             (_registry[_msgSender()].kind == EntityKind.VALIDATOR && _registry[_msgSender()].isEnabled == true) || hasRole(ADMIN_ROLE, _msgSender()) == true, 
@@ -89,35 +93,11 @@ contract IGovernorINNImpl is IGovernorINN, Initializable, UUPSUpgradeable, Acces
     }
 
     error ECDARecoverError(uint8);
-    // constructor() {
-    //     isMigrationEnabled = true;
-    //     _disableInitializers();
-    // }
 
-    function initialize(
-        address innTokenERC20,
-        address reservedEOA,
-        address commissionEOA,
-        // address validatorEOA,
-        // string calldata validatorName,
-        string calldata domainName,
-        string calldata domainVersion
-    ) public initializer {
-        commissionWallet = commissionEOA;
-        reservedWallet = reservedEOA;
-        // _validators[validatorEOA] = ValidatorInfo(validatorName, true);
-        validatorCount = 0;
-        startupCount = 0;
-        innTokenAddress = innTokenERC20;
-        votingDelay = 1 seconds;
-        votingPeriod = 7 days;
+    function initialize(string calldata domainName, string calldata domainVersion, address oracleIns) public reinitializer(2) {
+        oracle = oracleIns;
         _domainName = domainName;
         _domainVersion = domainVersion;
-        isMigrationEnabled = true;
-        isAdminFirstVote = true;
-
-        _grantRole(ADMIN_ROLE, _msgSender());
-        _setRoleAdmin(ADMIN_ROLE, ADMIN_ROLE);
     }
 
     function disableValidator(address validator) external onlyRole(ADMIN_ROLE) {
@@ -166,8 +146,10 @@ contract IGovernorINNImpl is IGovernorINN, Initializable, UUPSUpgradeable, Acces
         return keccak256(abi.encode(_TYPE_HASH, keccak256(abi.encodePacked(_domainName)), keccak256(abi.encodePacked(_domainVersion)), block.chainid, address(this)));
     }
 
-    function _authorizeUpgrade(address newImplementation) internal view override {
-        this.hasRole(ADMIN_ROLE, _msgSender());
+    function _authorizeUpgrade(address newImplementation) internal override {
+        require(newImplementation != address(0), "address invalid");
+        oldVersion = _getImplementation();
+        hasRole(ADMIN_ROLE, _msgSender());
     }
 
     function propose(ProposalRequest memory request, bytes memory signature) public override onlyValidatorsOrAdmin returns (bytes32) {
@@ -203,14 +185,6 @@ contract IGovernorINNImpl is IGovernorINN, Initializable, UUPSUpgradeable, Acces
             request.data
         );
 
-        // console.log("msg.sender: %s", _msgSender());
-        // console.log("create propsalId: ");
-        // console.logBytes32(proposalId);
-        // console.log("ADMIN_ROLE: ");
-        // console.logBytes32(ADMIN_ROLE);
-        // console.log("received data: ");
-        // console.logBytes(request.data);
-
         ProposalCore storage proposal = _proposals[proposalId];
         proposal.proposalID = proposalId;
         uint64 startTimeStamp = (uint64)(block.timestamp) + (uint64)(votingDelay);
@@ -233,18 +207,10 @@ contract IGovernorINNImpl is IGovernorINN, Initializable, UUPSUpgradeable, Acces
         if (proposal.proposalType == ProposalType.VALIDATOR) {
             if (proposal.actionType == ActionType.NEW) {
                 (NewValidatorProposal memory newValidator) = abi.decode(proposal.data, (NewValidatorProposal));
-                // (string memory validatorName, address validatorEOA) = abi.decode(proposal.data, (string, address));
 
                 require(newValidator.validatorEOA != address(0), "validator address should not be zero");
                 require(bytes(newValidator.validatorName).length != 0, "validator name should not be empty");
                 require(_registry[newValidator.validatorEOA].kind == EntityKind.NONE, "validatorEOA already exists");
-                // require(validatorEOA != address(0), "validator address should not be zero");
-                // require(bytes(validatorName).length != 0, "validator name should not be empty");
-
-                // console.log("storage proposalId: ");
-                // console.logBytes32(proposal.proposalID);
-                // console.log("validatorEOA decoded: %s", newValidator.validatorEOA);
-                // console.log("validatorName decoded: %s", newValidator.validatorName);
 
                 emit NewValidatorProposalCreated(
                     proposal.proposalID,
@@ -340,21 +306,9 @@ contract IGovernorINNImpl is IGovernorINN, Initializable, UUPSUpgradeable, Acces
      * @dev Cast a vote
      * Emits a {VoteCast} event.
      */
-    function castVoteAdmin(bytes32 proposalId) external onlyRole(ADMIN_ROLE) returns (bool) {
-        require(isAdminFirstVote == true, "admin already cast vote");
-        ProposalVote storage proposalVote = _proposalVotes[proposalId];
-        proposalVote.hasVoted.add(_msgSender());
-        emit VoteCast(_msgSender(), proposalId, VoteType.FOR, "");
-        
-        ProposalCore storage proposal = _proposals[proposalId];
-        proposal.isExecuted = true;
-        bool succeeded = true;
-
-        succeeded = _execute(proposal);
-        if (succeeded) emit ProposalExecuted(proposalId);
-        isAdminFirstVote = false;
-        return succeeded;
-    }
+   function castVoteAdmin(bytes32 proposalId) external view onlyRole(ADMIN_ROLE) returns (bool) {
+      revert();
+   }
 
     /**
      * @dev Internal vote casting mechanism: Check that the vote is pending, that it has not been cast yet, retrieve
@@ -475,10 +429,7 @@ contract IGovernorINNImpl is IGovernorINN, Initializable, UUPSUpgradeable, Acces
         ProposalCore storage proposal = _proposals[proposalId];
         proposal.isExecuted = true;
         bool succeeded = true;
-        // console.log("received proposalID: ");
-        // console.logBytes32(proposalId);
-        // console.log("storage proposalID: ");
-        // console.logBytes32(proposal.proposalID);
+
         succeeded = _execute(proposal);
         if (succeeded) emit ProposalExecuted(proposalId);
 
@@ -488,7 +439,7 @@ contract IGovernorINNImpl is IGovernorINN, Initializable, UUPSUpgradeable, Acces
     /**
      * @dev Internal execution mechanism. Can be overriden to implement different execution mechanism
      */
-    function _execute(ProposalCore storage proposal) internal virtual returns (bool) {
+        function _execute(ProposalCore storage proposal) internal virtual returns (bool) {
         bool success = true;
         if (proposal.proposalType == ProposalType.VALIDATOR) {
             if (proposal.actionType == ActionType.NEW) {
@@ -501,16 +452,16 @@ contract IGovernorINNImpl is IGovernorINN, Initializable, UUPSUpgradeable, Acces
             if (proposal.actionType == ActionType.NEW) {
                 NewInvestmentProposal memory newInvestment = abi.decode(proposal.data, (NewInvestmentProposal));
 
-                // console.log("transfer tokenOffser . . . ");
+                console.log("transfer tokenOffser . . . ");
                 success = (success && _transferToken(newInvestment.startupEOA, newInvestment.tokenOffer));
                 
-                // console.log("transfer %5 commission . . . ");
+                console.log("transfer %5 commission . . . ");
                 success = (success && _transferToken(commissionWallet, (5 * newInvestment.tokenOffer) / 100));
 
-                // console.log("transfer %1 proposer . . . ");
+                console.log("transfer %1 proposer . . . ");
                 success = (success && _transferToken(proposal.proposer, (newInvestment.tokenOffer) / 100));
 
-                // console.log("transfer %2 serward . . . ");
+                console.log("transfer %2 serward . . . ");
                 success = (success && _sendRewards(proposal.proposalID, newInvestment.tokenOffer));
                 _registry[newInvestment.startupEOA] = EntityInfo(newInvestment.startupName, EntityKind.STARTUP, true);
                 startupCount +=1;
@@ -518,16 +469,16 @@ contract IGovernorINNImpl is IGovernorINN, Initializable, UUPSUpgradeable, Acces
             } else if (proposal.actionType == ActionType.EXIT) {
                 ExitInvestmentProposal memory exitInvestment = abi.decode(proposal.data, (ExitInvestmentProposal));
 
-                // console.log("exist transfer tokenOffser . . . ");
+                console.log("exist transfer tokenOffser . . . ");
                 success = (success && _transferToken(exitInvestment.validatorEOA, exitInvestment.tokenOffer));
 
-                // console.log("exist transfer %5 commission . . . ");
+                console.log("exist transfer %5 commission . . . ");
                 success = (success && _transferToken(commissionWallet, (5 * exitInvestment.tokenOffer) / 100));
 
-                // console.log("exist transfer %1 proposer . . . ");
+                console.log("exist transfer %1 proposer . . . ");
                 success = (success && _transferToken(proposal.proposer, (exitInvestment.tokenOffer) / 100));
 
-                // console.log("exit transfer %2 serward . . . ");
+                console.log("exit transfer %2 serward . . . ");
                 success = (success && _sendRewards(proposal.proposalID, exitInvestment.tokenOffer));
             } else if (proposal.actionType == ActionType.FREEZE) {
                 FreezeInvestmentProposal memory freezeInvestment = abi.decode(proposal.data, (FreezeInvestmentProposal));
@@ -541,22 +492,22 @@ contract IGovernorINNImpl is IGovernorINN, Initializable, UUPSUpgradeable, Acces
         return success;
     }
 
-    function _sendRewards(bytes32 proposalID, uint256 tokenOffer) internal returns (bool) {
-        ProposalVote storage proposalVote = _proposalVotes[proposalID];
-        uint256 voterLength = proposalVote.hasVoted.length();
-        uint256 reward = ((2 * tokenOffer) / 100) / voterLength;
-        // console.log("sendRewards: %s, voterLength: %s", reward, voterLength);
-        bool success = true;
-        for (uint256 i = 0; i < voterLength; i++) {
-            // console.log("reward validator address: %s", proposalVote.hasVoted.at(i));
-            success = (success && _transferToken(proposalVote.hasVoted.at(i), reward));
-        }
-        return success;
+        function _sendRewards(bytes32 proposalID, uint256 tokenOffer) internal returns (bool) {
+            ProposalVote storage proposalVote = _proposalVotes[proposalID];
+            uint256 voterLength = proposalVote.hasVoted.length();
+            uint256 reward = ((2 * tokenOffer) / 100) / voterLength;
+            console.log("sendRewards: %s, voterLength: %s", reward, voterLength);
+            bool success = true;
+            for (uint256 i = 0; i < voterLength; i++) {
+                console.log("reward validator address: %s", proposalVote.hasVoted.at(i));
+                success = (success && _transferToken(proposalVote.hasVoted.at(i), reward));
+            }
+            return success;
     }
 
-    function _transferToken(address receiver, uint256 amount) internal returns (bool) {
+  function _transferToken(address receiver, uint256 amount) internal returns (bool) {
         bytes memory callData = abi.encodeWithSelector(TRANSFER_SIGNATURE, reservedWallet, receiver, amount);        
-        // console.log("reserved address: %s, receiver address: %s, amount: %s", reservedWallet, receiver, amount);
+        console.log("reserved address: %s, receiver address: %s, amount: %s", reservedWallet, receiver, amount);
         (bool success, ) = address(innTokenAddress).call(callData);
         require(success, "Execute: transfer failes! "); //TODO : get calldata outputs
         return success;

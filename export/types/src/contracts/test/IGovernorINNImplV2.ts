@@ -25,7 +25,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "../../common";
+} from "../../../common";
 
 export declare namespace IGovernorINN {
   export type ProposalRequestStruct = {
@@ -51,7 +51,7 @@ export declare namespace IGovernorINN {
   };
 }
 
-export interface IGovernorINNImplInterface extends utils.Interface {
+export interface IGovernorINNImplV2Interface extends utils.Interface {
   functions: {
     "ADMIN_ROLE()": FunctionFragment;
     "CONSENSUS_ROLE()": FunctionFragment;
@@ -70,13 +70,15 @@ export interface IGovernorINNImplInterface extends utils.Interface {
     "hasRole(bytes32,address)": FunctionFragment;
     "hasVoted(bytes32,address)": FunctionFragment;
     "hashProposal(bytes32,bytes32,address,uint8,uint8,bytes)": FunctionFragment;
-    "initialize(address,address,address,string,string)": FunctionFragment;
+    "initialize(string,string,address)": FunctionFragment;
     "innTokenAddress()": FunctionFragment;
     "isAdminFirstVote()": FunctionFragment;
     "isMigrationEnabled()": FunctionFragment;
     "isStartup(address)": FunctionFragment;
     "isValidator(address)": FunctionFragment;
     "name()": FunctionFragment;
+    "oldVersion()": FunctionFragment;
+    "oracle()": FunctionFragment;
     "propose((bytes32,uint8,uint8,string,bytes),bytes)": FunctionFragment;
     "proxiableUUID()": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
@@ -122,6 +124,8 @@ export interface IGovernorINNImplInterface extends utils.Interface {
       | "isStartup"
       | "isValidator"
       | "name"
+      | "oldVersion"
+      | "oracle"
       | "propose"
       | "proxiableUUID"
       | "renounceRole"
@@ -215,7 +219,7 @@ export interface IGovernorINNImplInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [string, string, string, string, string]
+    values: [string, string, string]
   ): string;
   encodeFunctionData(
     functionFragment: "innTokenAddress",
@@ -232,6 +236,11 @@ export interface IGovernorINNImplInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "isStartup", values: [string]): string;
   encodeFunctionData(functionFragment: "isValidator", values: [string]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "oldVersion",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "oracle", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "propose",
     values: [IGovernorINN.ProposalRequestStruct, BytesLike]
@@ -358,6 +367,8 @@ export interface IGovernorINNImplInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "oldVersion", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "oracle", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "propose", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "proxiableUUID",
@@ -647,12 +658,12 @@ export type VoteCastEvent = TypedEvent<
 
 export type VoteCastEventFilter = TypedEventFilter<VoteCastEvent>;
 
-export interface IGovernorINNImpl extends BaseContract {
+export interface IGovernorINNImplV2 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: IGovernorINNImplInterface;
+  interface: IGovernorINNImplV2Interface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -701,8 +712,8 @@ export interface IGovernorINNImpl extends BaseContract {
 
     castVoteAdmin(
       proposalId: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     commissionWallet(overrides?: CallOverrides): Promise<[string]>;
 
@@ -747,11 +758,9 @@ export interface IGovernorINNImpl extends BaseContract {
     ): Promise<[string]>;
 
     initialize(
-      innTokenERC20: string,
-      reservedEOA: string,
-      commissionEOA: string,
       domainName: string,
       domainVersion: string,
+      oracleIns: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -766,6 +775,10 @@ export interface IGovernorINNImpl extends BaseContract {
     isValidator(addr: string, overrides?: CallOverrides): Promise<[boolean]>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
+
+    oldVersion(overrides?: CallOverrides): Promise<[string]>;
+
+    oracle(overrides?: CallOverrides): Promise<[string]>;
 
     propose(
       request: IGovernorINN.ProposalRequestStruct,
@@ -860,8 +873,8 @@ export interface IGovernorINNImpl extends BaseContract {
 
   castVoteAdmin(
     proposalId: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   commissionWallet(overrides?: CallOverrides): Promise<string>;
 
@@ -906,11 +919,9 @@ export interface IGovernorINNImpl extends BaseContract {
   ): Promise<string>;
 
   initialize(
-    innTokenERC20: string,
-    reservedEOA: string,
-    commissionEOA: string,
     domainName: string,
     domainVersion: string,
+    oracleIns: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -925,6 +936,10 @@ export interface IGovernorINNImpl extends BaseContract {
   isValidator(addr: string, overrides?: CallOverrides): Promise<boolean>;
 
   name(overrides?: CallOverrides): Promise<string>;
+
+  oldVersion(overrides?: CallOverrides): Promise<string>;
+
+  oracle(overrides?: CallOverrides): Promise<string>;
 
   propose(
     request: IGovernorINN.ProposalRequestStruct,
@@ -1062,11 +1077,9 @@ export interface IGovernorINNImpl extends BaseContract {
     ): Promise<string>;
 
     initialize(
-      innTokenERC20: string,
-      reservedEOA: string,
-      commissionEOA: string,
       domainName: string,
       domainVersion: string,
+      oracleIns: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1081,6 +1094,10 @@ export interface IGovernorINNImpl extends BaseContract {
     isValidator(addr: string, overrides?: CallOverrides): Promise<boolean>;
 
     name(overrides?: CallOverrides): Promise<string>;
+
+    oldVersion(overrides?: CallOverrides): Promise<string>;
+
+    oracle(overrides?: CallOverrides): Promise<string>;
 
     propose(
       request: IGovernorINN.ProposalRequestStruct,
@@ -1346,7 +1363,7 @@ export interface IGovernorINNImpl extends BaseContract {
 
     castVoteAdmin(
       proposalId: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     commissionWallet(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1395,11 +1412,9 @@ export interface IGovernorINNImpl extends BaseContract {
     ): Promise<BigNumber>;
 
     initialize(
-      innTokenERC20: string,
-      reservedEOA: string,
-      commissionEOA: string,
       domainName: string,
       domainVersion: string,
+      oracleIns: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1414,6 +1429,10 @@ export interface IGovernorINNImpl extends BaseContract {
     isValidator(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
+
+    oldVersion(overrides?: CallOverrides): Promise<BigNumber>;
+
+    oracle(overrides?: CallOverrides): Promise<BigNumber>;
 
     propose(
       request: IGovernorINN.ProposalRequestStruct,
@@ -1517,7 +1536,7 @@ export interface IGovernorINNImpl extends BaseContract {
 
     castVoteAdmin(
       proposalId: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     commissionWallet(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1566,11 +1585,9 @@ export interface IGovernorINNImpl extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     initialize(
-      innTokenERC20: string,
-      reservedEOA: string,
-      commissionEOA: string,
       domainName: string,
       domainVersion: string,
+      oracleIns: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1593,6 +1610,10 @@ export interface IGovernorINNImpl extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    oldVersion(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    oracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     propose(
       request: IGovernorINN.ProposalRequestStruct,

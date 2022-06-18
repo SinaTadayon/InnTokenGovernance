@@ -55,9 +55,13 @@ export interface IGovernorINNInterface extends utils.Interface {
   functions: {
     "cancel(bytes32,string)": FunctionFragment;
     "castVote(string,bytes32,uint8)": FunctionFragment;
+    "castVoteAdmin(bytes32)": FunctionFragment;
+    "disableValidator(address)": FunctionFragment;
     "execute(bytes32)": FunctionFragment;
     "hasVoted(bytes32,address)": FunctionFragment;
     "hashProposal(bytes32,bytes32,address,uint8,uint8,bytes)": FunctionFragment;
+    "isStartup(address)": FunctionFragment;
+    "isValidator(address)": FunctionFragment;
     "name()": FunctionFragment;
     "propose((bytes32,uint8,uint8,string,bytes),bytes)": FunctionFragment;
     "state(bytes32)": FunctionFragment;
@@ -68,9 +72,13 @@ export interface IGovernorINNInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "cancel"
       | "castVote"
+      | "castVoteAdmin"
+      | "disableValidator"
       | "execute"
       | "hasVoted"
       | "hashProposal"
+      | "isStartup"
+      | "isValidator"
       | "name"
       | "propose"
       | "state"
@@ -84,6 +92,14 @@ export interface IGovernorINNInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "castVote",
     values: [string, BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "castVoteAdmin",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "disableValidator",
+    values: [string]
   ): string;
   encodeFunctionData(functionFragment: "execute", values: [BytesLike]): string;
   encodeFunctionData(
@@ -101,6 +117,8 @@ export interface IGovernorINNInterface extends utils.Interface {
       BytesLike
     ]
   ): string;
+  encodeFunctionData(functionFragment: "isStartup", values: [string]): string;
+  encodeFunctionData(functionFragment: "isValidator", values: [string]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "propose",
@@ -111,10 +129,23 @@ export interface IGovernorINNInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "cancel", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "castVote", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "castVoteAdmin",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "disableValidator",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "execute", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasVoted", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "hashProposal",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "isStartup", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "isValidator",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
@@ -311,6 +342,16 @@ export interface IGovernorINN extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    castVoteAdmin(
+      proposalId: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    disableValidator(
+      validator: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     execute(
       proposalId: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -331,6 +372,10 @@ export interface IGovernorINN extends BaseContract {
       data: BytesLike,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    isStartup(addr: string, overrides?: CallOverrides): Promise<[boolean]>;
+
+    isValidator(addr: string, overrides?: CallOverrides): Promise<[boolean]>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
@@ -358,6 +403,16 @@ export interface IGovernorINN extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  castVoteAdmin(
+    proposalId: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  disableValidator(
+    validator: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   execute(
     proposalId: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -378,6 +433,10 @@ export interface IGovernorINN extends BaseContract {
     data: BytesLike,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  isStartup(addr: string, overrides?: CallOverrides): Promise<boolean>;
+
+  isValidator(addr: string, overrides?: CallOverrides): Promise<boolean>;
 
   name(overrides?: CallOverrides): Promise<string>;
 
@@ -405,6 +464,16 @@ export interface IGovernorINN extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    castVoteAdmin(
+      proposalId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    disableValidator(
+      validator: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     execute(proposalId: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
     hasVoted(
@@ -422,6 +491,10 @@ export interface IGovernorINN extends BaseContract {
       data: BytesLike,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    isStartup(addr: string, overrides?: CallOverrides): Promise<boolean>;
+
+    isValidator(addr: string, overrides?: CallOverrides): Promise<boolean>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -570,6 +643,16 @@ export interface IGovernorINN extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    castVoteAdmin(
+      proposalId: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    disableValidator(
+      validator: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     execute(
       proposalId: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -590,6 +673,10 @@ export interface IGovernorINN extends BaseContract {
       data: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    isStartup(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    isValidator(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -618,6 +705,16 @@ export interface IGovernorINN extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    castVoteAdmin(
+      proposalId: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    disableValidator(
+      validator: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     execute(
       proposalId: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -636,6 +733,16 @@ export interface IGovernorINN extends BaseContract {
       proposalType: BigNumberish,
       actionType: BigNumberish,
       data: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isStartup(
+      addr: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isValidator(
+      addr: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

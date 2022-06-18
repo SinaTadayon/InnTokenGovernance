@@ -580,7 +580,7 @@
         "type": "bool"
       }
     ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -760,21 +760,6 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "innTokenERC20",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "reservedEOA",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "commissionEOA",
-        "type": "address"
-      },
-      {
         "internalType": "string",
         "name": "domainName",
         "type": "string"
@@ -783,6 +768,11 @@
         "internalType": "string",
         "name": "domainVersion",
         "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "oracleIns",
+        "type": "address"
       }
     ],
     "name": "initialize",
@@ -875,6 +865,32 @@
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "oldVersion",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "oracle",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

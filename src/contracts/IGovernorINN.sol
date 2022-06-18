@@ -214,6 +214,17 @@ interface IGovernorINN {
     ) external returns (bool);
 
     /**
+     * @dev Cast a vote
+     * Emits a {castVoteAdmin} event.
+     */
+    function castVoteAdmin(bytes32 proposalId) external returns (bool);
+
+    /**
+     * @dev disableValidator"
+     */
+    function disableValidator(address validator) external;
+
+    /**
      * @dev Returns weither `account` has cast a vote on `proposalId`.
      */
     function hasVoted(bytes32 proposalId, address account) external view returns (bool);
@@ -232,6 +243,16 @@ interface IGovernorINN {
      * @dev Version of the governor instance (used in building the ERC712 domain separator). Default: "1"
      */
     function version() external view returns (string memory);
+
+    /**
+     * @dev isValidator
+     */
+    function isValidator(address addr) external view returns (bool);
+
+    /**
+     * @dev isStartup
+     */
+    function isStartup(address addr) external view returns (bool);
 
     /**
      * @dev Hashing function used to (re)build the proposal id from the proposal ...
