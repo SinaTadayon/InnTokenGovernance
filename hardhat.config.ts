@@ -23,6 +23,7 @@ const netAccounts = mnemonic
   : privateKey
   ? [{ privateKey: `0x${privateKey}`, balance: "1000" }]
   : undefined;
+// const netAccounts = privateKey
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -37,27 +38,35 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
+
 const config: HardhatUserConfig = {
-  solidity: "0.8.14",
+  solidity: {
+    version: '0.8.14',
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
+    },
+  },
   networks: {
     hardhat: netAccounts ? { accounts: netAccounts } : {},
-
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
-
     polygon_main: {
       url: "https://polygon-rpc.com",
       chainId: 137,
-      accounts: netAccounts,
+      // @ts-ignore
+      accounts: [privateKey],
     },
-
     polygon_mumbai: {
       url: "https://rpc-mumbai.maticvigil.com/",
       chainId: 80001,
-      accounts: netAccounts,
+      // @ts-ignore
+      accounts: [privateKey],
     },
   },
 
@@ -66,19 +75,15 @@ const config: HardhatUserConfig = {
     currency: "USD",
   },
 
-  // etherscan: {
-  //   apiKey: {
-  //     // polygon
-  //     polygon: process.env.ETHERSCAN_KEY_POLYGON_MAIN,
-  //     polygonMumbai: process.env.ETHERSCAN_KEY_POLYGON_MUMBAI,
-  //   },
-  // },
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_KEY,
+  },
 
   contractSizer: {
     alphaSort: true,
     disambiguatePaths: false,
     runOnCompile: true,
-    strict: false,
+    strict: true,
     only: [],
   },
 

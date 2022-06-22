@@ -1,0 +1,487 @@
+{
+  "manifestVersion": "3.2",
+  "proxies": [
+    {
+      "address": "0xbBA661A61D758F90ed69B3b9f8453F22156B2dA5",
+      "txHash": "0x555a1ed3a477db0f5817c69d2c4172a5da413a689ca40a85021d11703e4ade18",
+      "kind": "uups"
+    }
+  ],
+  "impls": {
+    "a9c19ef715882d14e412e2f3f0936839a1f34da1ace014e59ace1b110e239447": {
+      "address": "0xD986C2644030cDe0887875E000Dcf0077c88095c",
+      "txHash": "0x6b6c3c6c011c3bac3acd74a7e65fc4ea3cd5dfaac7b462757a44c25dfd081895",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC1967UpgradeUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:211"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "UUPSUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:107"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "151",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC165Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:41"
+          },
+          {
+            "label": "_roles",
+            "offset": 0,
+            "slot": "201",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)34_storage)",
+            "contract": "AccessControlUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:61"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "202",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "AccessControlUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:247"
+          },
+          {
+            "label": "_registry",
+            "offset": 0,
+            "slot": "251",
+            "type": "t_mapping(t_address,t_struct(EntityInfo)13604_storage)",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:60"
+          },
+          {
+            "label": "_proposalVotes",
+            "offset": 0,
+            "slot": "252",
+            "type": "t_mapping(t_bytes32,t_struct(ProposalVote)13592_storage)",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:61"
+          },
+          {
+            "label": "_proposals",
+            "offset": 0,
+            "slot": "253",
+            "type": "t_mapping(t_bytes32,t_struct(ProposalCore)13582_storage)",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:62"
+          },
+          {
+            "label": "votingDelay",
+            "offset": 0,
+            "slot": "254",
+            "type": "t_uint256",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:64"
+          },
+          {
+            "label": "votingPeriod",
+            "offset": 0,
+            "slot": "255",
+            "type": "t_uint256",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:65"
+          },
+          {
+            "label": "reservedWallet",
+            "offset": 0,
+            "slot": "256",
+            "type": "t_address",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:67"
+          },
+          {
+            "label": "commissionWallet",
+            "offset": 0,
+            "slot": "257",
+            "type": "t_address",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:68"
+          },
+          {
+            "label": "innTokenAddress",
+            "offset": 0,
+            "slot": "258",
+            "type": "t_address",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:69"
+          },
+          {
+            "label": "_domainName",
+            "offset": 0,
+            "slot": "259",
+            "type": "t_string_storage",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:71"
+          },
+          {
+            "label": "_domainVersion",
+            "offset": 0,
+            "slot": "260",
+            "type": "t_string_storage",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:72"
+          },
+          {
+            "label": "validatorCount",
+            "offset": 0,
+            "slot": "261",
+            "type": "t_uint32",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:73"
+          },
+          {
+            "label": "startupCount",
+            "offset": 4,
+            "slot": "261",
+            "type": "t_uint32",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:74"
+          },
+          {
+            "label": "isMigrationEnabled",
+            "offset": 8,
+            "slot": "261",
+            "type": "t_bool",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:75"
+          },
+          {
+            "label": "isAdminFirstVote",
+            "offset": 9,
+            "slot": "261",
+            "type": "t_bool",
+            "contract": "IGovernorINNImpl",
+            "src": "src/contracts/IGovernorINNImpl.sol:76"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_bytes32)dyn_storage": {
+            "label": "bytes32[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_bytes_storage": {
+            "label": "bytes",
+            "numberOfBytes": "32"
+          },
+          "t_enum(ActionType)13252": {
+            "label": "enum IGovernorINN.ActionType",
+            "members": [
+              "NONE",
+              "NEW",
+              "EXIT",
+              "FREEZE",
+              "UNFREEZE"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_enum(EntityKind)13596": {
+            "label": "enum IGovernorINNImpl.EntityKind",
+            "members": [
+              "NONE",
+              "VALIDATOR",
+              "STARTUP"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_enum(ProposalType)13246": {
+            "label": "enum IGovernorINN.ProposalType",
+            "members": [
+              "NONE",
+              "VALIDATOR",
+              "INVESTMENT",
+              "GOVERNANCE"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_struct(EntityInfo)13604_storage)": {
+            "label": "mapping(address => struct IGovernorINNImpl.EntityInfo)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_struct(ProposalCore)13582_storage)": {
+            "label": "mapping(bytes32 => struct IGovernorINNImpl.ProposalCore)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_struct(ProposalVote)13592_storage)": {
+            "label": "mapping(bytes32 => struct IGovernorINNImpl.ProposalVote)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)34_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_uint256)": {
+            "label": "mapping(bytes32 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(AddressSet)3495_storage": {
+            "label": "struct EnumerableSetUpgradeable.AddressSet",
+            "members": [
+              {
+                "label": "_inner",
+                "type": "t_struct(Set)3194_storage",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_struct(EntityInfo)13604_storage": {
+            "label": "struct IGovernorINNImpl.EntityInfo",
+            "members": [
+              {
+                "label": "name",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "kind",
+                "type": "t_enum(EntityKind)13596",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "isEnabled",
+                "type": "t_bool",
+                "offset": 1,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_struct(ProposalCore)13582_storage": {
+            "label": "struct IGovernorINNImpl.ProposalCore",
+            "members": [
+              {
+                "label": "proposalID",
+                "type": "t_bytes32",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "offchainID",
+                "type": "t_bytes32",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "descriptionHash",
+                "type": "t_bytes32",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "proposer",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "votingStartAt",
+                "type": "t_struct(Timestamp)1633_storage",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "votingEndAt",
+                "type": "t_struct(Timestamp)1633_storage",
+                "offset": 0,
+                "slot": "5"
+              },
+              {
+                "label": "proposalType",
+                "type": "t_enum(ProposalType)13246",
+                "offset": 0,
+                "slot": "6"
+              },
+              {
+                "label": "actionType",
+                "type": "t_enum(ActionType)13252",
+                "offset": 1,
+                "slot": "6"
+              },
+              {
+                "label": "isExecuted",
+                "type": "t_bool",
+                "offset": 2,
+                "slot": "6"
+              },
+              {
+                "label": "isCanceled",
+                "type": "t_bool",
+                "offset": 3,
+                "slot": "6"
+              },
+              {
+                "label": "data",
+                "type": "t_bytes_storage",
+                "offset": 0,
+                "slot": "7"
+              }
+            ],
+            "numberOfBytes": "256"
+          },
+          "t_struct(ProposalVote)13592_storage": {
+            "label": "struct IGovernorINNImpl.ProposalVote",
+            "members": [
+              {
+                "label": "againstVotes",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "forVotes",
+                "type": "t_uint64",
+                "offset": 8,
+                "slot": "0"
+              },
+              {
+                "label": "abstainVotes",
+                "type": "t_uint64",
+                "offset": 16,
+                "slot": "0"
+              },
+              {
+                "label": "hasVoted",
+                "type": "t_struct(AddressSet)3495_storage",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "96"
+          },
+          "t_struct(RoleData)34_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_struct(Set)3194_storage": {
+            "label": "struct EnumerableSetUpgradeable.Set",
+            "members": [
+              {
+                "label": "_values",
+                "type": "t_array(t_bytes32)dyn_storage",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_indexes",
+                "type": "t_mapping(t_bytes32,t_uint256)",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_struct(Timestamp)1633_storage": {
+            "label": "struct TimersUpgradeable.Timestamp",
+            "members": [
+              {
+                "label": "_deadline",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    }
+  }
+}
